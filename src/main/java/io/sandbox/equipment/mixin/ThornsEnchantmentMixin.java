@@ -1,7 +1,12 @@
 package io.sandbox.equipment.mixin;
 
+import java.util.Map.Entry;
+
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.ThornsEnchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
@@ -26,31 +31,46 @@ public class ThornsEnchantmentMixin {
 		Items.CHAINMAIL_CHESTPLATE
 	};
 
+	@Inject(method = "getMaxLevel", at = @At("HEAD"), cancellable = true)
+	private void getMaxLevelMixin(CallbackInfoReturnable<Integer> cbir) {
+		cbir.setReturnValue(5);
+	}
+
+	@Inject(method = "onUserDamaged", at = @At("HEAD"), cancellable = true)
+	private void onUserDamagedMixin(LivingEntity user, Entity attacker, int level, CallbackInfo cbi) {
+		if (level == 0) {
+			cbi.cancel();
+			return;
+		}
+
+		if (attacker != null) {
+			attacker.damage(DamageSource.thorns(user), level * 1.0F);
+		}
+
+		Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.chooseEquipmentWith(Enchantments.THORNS, user);
+		if (entry != null) {
+			((ItemStack)entry.getValue()).damage(level, user, (entity) -> {
+				 entity.sendEquipmentBreakStatus((EquipmentSlot)entry.getKey());
+			});
+	 	}
+
+		cbi.cancel();
+	}
+
 	@Inject(method = "isAcceptableItem", at = @At("HEAD"), cancellable = true)
-	private void isAcceptableItem(ItemStack stack, CallbackInfoReturnable<Boolean> cbir) {
+	private void isAcceptableItemMixin(ItemStack stack, CallbackInfoReturnable<Boolean> cbir) {
 		if (!(stack.getItem() instanceof ArmorItem)) {
 			cbir.setReturnValue(false);
-			cbir.cancel();
 			return;
 		}
 
 		for (int i = 0; i < CHESTPLATES.length; i++) {
 			if (CHESTPLATES[i] == stack.getItem()) {
 				cbir.setReturnValue(true);
-				cbir.cancel();
 				return;
 			}
 		}
 
 		cbir.setReturnValue(false);
-		cbir.cancel();
-	}
-
-	@Inject(method = "onUserDamaged", at = @At("HEAD"), cancellable = true)
-	private void onUserDamaged(LivingEntity user, Entity attacker, int level, CallbackInfo cbi) {
-		if (attacker != null) {
-			attacker.damage(DamageSource.thorns(user), level * 1.0F);
-		}
-		cbi.cancel();
 	}
 }
