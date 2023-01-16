@@ -1,14 +1,17 @@
 package io.sandbox.equipment;
 
 import net.fabricmc.api.ModInitializer;
+
 import io.sandbox.equipment.configTypes.ThornsConfig;
 
 import io.sandbox.equipment.enchantments.EnchantLoader;
 import io.sandbox.equipment.items.ItemLoader;
-import net.fabricmc.api.ModInitializer;
+import io.sandbox.lib.Config;
+import io.sandbox.lib.SandboxLogger;
 import net.minecraft.util.Identifier;
 
 public class Main implements ModInitializer {
+	public static final String modId = "sandbox-equipment";
 	private static final SandboxLogger LOGGER = new SandboxLogger("SandboxEquipment");
 
 	private static Config<ThornsConfig> thornsConfig = new Config<ThornsConfig>(ThornsConfig.class, "SandboxMC/equipment/thornsConfig.json");
@@ -30,6 +33,6 @@ public class Main implements ModInitializer {
 	}
 
 	public static Identifier id (String name) {
-		return new Identifier(MOD_ID, name);
+		return new Identifier(modId, name);
 	}
 }

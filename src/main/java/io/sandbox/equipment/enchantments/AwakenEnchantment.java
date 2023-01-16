@@ -3,21 +3,17 @@ package io.sandbox.equipment.enchantments;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
-import net.minecraft.util.registry.Registry;
 
 public class AwakenEnchantment extends Enchantment {
 
@@ -66,7 +62,7 @@ public class AwakenEnchantment extends Enchantment {
   
         for (int i = 0; i < nbtList.size(); ++i) {
           NbtCompound nbtCompound = nbtList.getCompound(i);
-          Optional<Enchantment> enchantOptional = Registry.ENCHANTMENT.getOrEmpty(EnchantmentHelper.getIdFromNbt(nbtCompound));
+          Optional<Enchantment> enchantOptional = Registries.ENCHANTMENT.getOrEmpty(EnchantmentHelper.getIdFromNbt(nbtCompound));
           if (enchantOptional.isPresent()) {
             Enchantment enchantment = enchantOptional.get();
             if (enchantment instanceof AwakenEnchantment) {
