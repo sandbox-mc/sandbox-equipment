@@ -20,8 +20,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import io.sandbox.equipment.Main;
+import io.sandbox.equipment.configTypes.ThornsConfig;
+
 @Mixin(ThornsEnchantment.class)
 public class ThornsEnchantmentMixin {
+	private static final ThornsConfig CONFIG = Main.getThornsConfig();
 	private static final Item[] CHESTPLATES = {
 		Items.IRON_CHESTPLATE,
 		Items.DIAMOND_CHESTPLATE,
@@ -33,18 +37,22 @@ public class ThornsEnchantmentMixin {
 
 	@Inject(method = "getMaxLevel", at = @At("HEAD"), cancellable = true)
 	private void getMaxLevelMixin(CallbackInfoReturnable<Integer> cbir) {
-		cbir.setReturnValue(5);
+		if (!CONFIG.enabled) { return; }
+
+		cbir.setReturnValue(CONFIG.maxLevel);
 	}
 
 	@Inject(method = "onUserDamaged", at = @At("HEAD"), cancellable = true)
 	private void onUserDamagedMixin(LivingEntity user, Entity attacker, int level, CallbackInfo cbi) {
+		if (!CONFIG.enabled) { return; }
+
 		if (level == 0) {
 			cbi.cancel();
 			return;
 		}
 
 		if (attacker != null) {
-			attacker.damage(DamageSource.thorns(user), level * 1.0F);
+			attacker.damage(DamageSource.thorns(user), level * CONFIG.damagePerLevel);
 		}
 
 		Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.chooseEquipmentWith(Enchantments.THORNS, user);
@@ -59,6 +67,8 @@ public class ThornsEnchantmentMixin {
 
 	@Inject(method = "isAcceptableItem", at = @At("HEAD"), cancellable = true)
 	private void isAcceptableItemMixin(ItemStack stack, CallbackInfoReturnable<Boolean> cbir) {
+		if (!CONFIG.enabled) { return; }
+
 		if (!(stack.getItem() instanceof ArmorItem)) {
 			cbir.setReturnValue(false);
 			return;

@@ -1,7 +1,7 @@
 package io.sandbox.equipment;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.fabricmc.api.ModInitializer;
+import io.sandbox.equipment.configTypes.ThornsConfig;
 
 import io.sandbox.equipment.enchantments.EnchantLoader;
 import io.sandbox.equipment.items.ItemLoader;
@@ -9,21 +9,24 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 
 public class Main implements ModInitializer {
-	public static final String MOD_ID = "equipment";
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final Logger LOGGER = LoggerFactory.getLogger("equipment");
+	private static final SandboxLogger LOGGER = new SandboxLogger("SandboxEquipment");
+
+	private static Config<ThornsConfig> thornsConfig = new Config<ThornsConfig>(ThornsConfig.class, "SandboxMC/equipment/thornsConfig.json");
 
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
+		LOGGER.info("The following equipment modifications were loaded:");
+
+		if (getThornsConfig().enabled) {
+			LOGGER.info("Cooler thorns enchantment");
+		}
+
 		ItemLoader.init();
 		EnchantLoader.init();
+	}
 
-		LOGGER.info("Sandbox Equipment loaded");
+	public static ThornsConfig getThornsConfig() {
+		return thornsConfig.getConfig();
 	}
 
 	public static Identifier id (String name) {
