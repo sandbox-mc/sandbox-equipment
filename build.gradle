@@ -30,7 +30,7 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "io.sandbox.lib:sandbox-lib-1.19.3+2023-01-15r1"
+	modImplementation "io.sandbox.lib:sandbox-lib-${project.sandbox_lib}"
 }
 
 processResources {
