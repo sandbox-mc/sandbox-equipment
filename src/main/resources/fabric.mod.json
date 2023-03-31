@@ -19,6 +19,9 @@
 
   "environment": "*",
   "entrypoints": {
+    "client": [
+      "io.sandbox.equipment.MainClient"
+    ],
     "main": [
       "io.sandbox.equipment.Main"
     ]

@@ -2,60 +2,52 @@
     "providers": [
         {
             "type": "bitmap",
-            "file": "minecraft:custom/icon.png",
-            "ascent": 2,
-            "height": 27,
+            "file": "minecraft:custom/attack_speed_icon.png",
+            "ascent": 8,
+            "height": 10,
             "chars": ["\uE000"]
         },
         {
             "type": "bitmap",
-            "file": "minecraft:custom/icon_half.png",
-            "ascent": 2,
-            "height": 27,
+            "file": "minecraft:custom/attack_icon.png",
+            "ascent": 8,
+            "height": 10,
             "chars": ["\uE001"]
         },
         {
             "type": "bitmap",
-            "file": "minecraft:custom/icon_off.png",
-            "ascent": 2,
-            "height": 27,
+            "file": "minecraft:custom/iron_boots_icon.png",
+            "ascent": 8,
+            "height": 10,
             "chars": ["\uE002"]
         },
         {
             "type": "bitmap",
-            "file": "minecraft:custom/inactive_slot_2.png",
-            "ascent": 12,
-            "height": 16,
+            "file": "minecraft:custom/iron_chestplate_icon.png",
+            "ascent": 8,
+            "height": 10,
             "chars": ["\uE003"]
         },
         {
             "type": "bitmap",
-            "file": "minecraft:custom/ability_icon.png",
-            "ascent": 12,
-            "height": 16,
+            "file": "minecraft:custom/iron_helmet_icon.png",
+            "ascent": 8,
+            "height": 10,
             "chars": ["\uE004"]
         },
         {
             "type": "bitmap",
-            "file": "minecraft:custom/lock.png",
-            "ascent": 12,
-            "height": 17,
+            "file": "minecraft:custom/iron_leggings_icon.png",
+            "ascent": 8,
+            "height": 10,
             "chars": ["\uE005"]
         },
         {
             "type": "bitmap",
-            "file": "minecraft:custom/poison.png",
-            "ascent": 12,
-            "height": 17,
+            "file": "minecraft:custom/icon_dot.png",
+            "ascent": 8,
+            "height": 10,
             "chars": ["\uE006"]
-        }
-        ,
-        {
-            "type": "bitmap",
-            "file": "minecraft:custom/ambush.png",
-            "ascent": 12,
-            "height": 17,
-            "chars": ["\uE007"]
         }
     ]
 }

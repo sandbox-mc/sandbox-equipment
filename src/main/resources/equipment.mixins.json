@@ -6,9 +6,9 @@
   "mixins": [
   ],
   "client": [
-    "ItemStackMixin",
+    "ItemMixin",
     "LivingEntityMixin",
-    "SwordItemMixin",
+    "PlayerEntityMixin",
     "ThornsEnchantmentMixin"
   ],
   "injectors": {
