@@ -24,7 +24,7 @@ public class AttributeLoader {
     new ClampedEntityAttribute("attribute.sandbox-equipment.block_recovery", 0, 0, 50).setTracked(true);
   
   // This is used for tracking current block strength
-  // used max block strength for the attrubute
+  // use max block strength for the attrubute
   public static final EntityAttribute BLOCK_STRENGTH_ATTRIBUTE =
     new ClampedEntityAttribute("attribute.sandbox-equipment.block_strength", 20, 0, 200).setTracked(true);
 
@@ -60,8 +60,8 @@ public class AttributeLoader {
     Registry.register(Registries.ATTRIBUTE, Main.id("block_strength"), BLOCK_STRENGTH_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("max_block_strength"), MAX_BLOCK_STRENGTH_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("rage_active"), RAGE_ACTIVE_ATTRIBUTE);
-    Registry.register(Registries.ATTRIBUTE, Main.id("rage_generation"), RAGE_GENERATION_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("rage_level"), RAGE_LEVEL_ATTRIBUTE);
+    Registry.register(Registries.ATTRIBUTE, Main.id("rage_generation"), RAGE_GENERATION_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("max_rage"), MAX_RAGE_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("vigilant_strike_chance"), VIGILANT_STRIKE_CHANCE_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("vigilant_strike_multiplier"), VIGILANT_STRIKE_MULTIPLIER_ATTRIBUTE);
