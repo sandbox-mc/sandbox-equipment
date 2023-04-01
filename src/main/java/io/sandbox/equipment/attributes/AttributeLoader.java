@@ -32,16 +32,19 @@ public class AttributeLoader {
     new ClampedEntityAttribute("attribute.sandbox-equipment.max_block_strength", 20, 0, 200).setTracked(true);
     
   public static final EntityAttribute RAGE_GENERATION_ATTRIBUTE =
-    new ClampedEntityAttribute("attribute.sandbox-equipment.rage_generation", 20, 0, 20).setTracked(true);
+    new ClampedEntityAttribute("attribute.sandbox-equipment.rage_generation", 0, 0, 100).setTracked(true);
   
+  public static final EntityAttribute RAGE_ACTIVE_ATTRIBUTE =
+    new ClampedEntityAttribute("attribute.sandbox-equipment.rage_active", 0, 0, 10).setTracked(true);
+    
   // This value is used for tracking the current amount of rage
   // Not for setting as an attribute
   public static final EntityAttribute RAGE_LEVEL_ATTRIBUTE =
-    new ClampedEntityAttribute("attribute.sandbox-equipment.rage_level", 0, 0, 20).setTracked(true);
+    new ClampedEntityAttribute("attribute.sandbox-equipment.rage_level", 0, 0, 40).setTracked(true);
   
   public static final EntityAttribute MAX_RAGE_ATTRIBUTE =
-    new ClampedEntityAttribute("attribute.sandbox-equipment.max_rage", 0, 0, 15).setTracked(true);
-  
+    new ClampedEntityAttribute("attribute.sandbox-equipment.max_rage", 20, 0, 40).setTracked(true);
+
   public static final EntityAttribute VIGILANT_STRIKE_CHANCE_ATTRIBUTE =
     new ClampedEntityAttribute("attribute.sandbox-equipment.vigilant_strike_chance", 0, 0, 20).setTracked(true);
   
@@ -56,6 +59,7 @@ public class AttributeLoader {
     Registry.register(Registries.ATTRIBUTE, Main.id("block_recovery"), BLOCK_RECOVERY_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("block_strength"), BLOCK_STRENGTH_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("max_block_strength"), MAX_BLOCK_STRENGTH_ATTRIBUTE);
+    Registry.register(Registries.ATTRIBUTE, Main.id("rage_active"), RAGE_ACTIVE_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("rage_generation"), RAGE_GENERATION_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("rage_level"), RAGE_LEVEL_ATTRIBUTE);
     Registry.register(Registries.ATTRIBUTE, Main.id("max_rage"), MAX_RAGE_ATTRIBUTE);

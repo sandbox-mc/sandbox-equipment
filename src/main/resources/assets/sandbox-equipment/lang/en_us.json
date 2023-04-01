@@ -11,6 +11,7 @@
   "attribute.sandbox-equipment.max_rage": "Max Rage",
   "attribute.sandbox-equipment.vigilant_strike_chance": "Vigilant Strike Chance",
   "attribute.sandbox-equipment.vigilant_strike_multiplier": "Vigilant Strike Multiplier",
+  "effect.sandbox-equipment.rage_effect": "Rage",
   "item.message.is_enhanced": "Item has already been enhanced",
   "item.message.item_not_added_to_config": "%s has not been added to Attribute Config",
   "item.sandbox-equipment.enhanced_golden_axe": "Enhanced Golden Axe",

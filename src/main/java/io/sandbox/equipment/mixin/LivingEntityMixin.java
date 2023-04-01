@@ -19,7 +19,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
@@ -33,6 +32,7 @@ public abstract class LivingEntityMixin extends Entity {
   protected final Random random = Random.create();
   private Integer ticksSinceShieldUsed = 0;
   private double shieldBlockStrengthAmount = 0.0;
+  private Integer recentRageAttack = 0;
 
   public LivingEntityMixin(EntityType<?> type, World world) {
     super(type, world);
@@ -141,22 +141,36 @@ public abstract class LivingEntityMixin extends Entity {
         livingAttacker.heal((float)(0.5 + lifeOnHitAmount));
       }
 
-      // Rage generation logic
+      // ****
+      //  Rage generation logic
+      // ****/
       double rageGeneration = livingAttacker.getAttributeValue(AttributeLoader.RAGE_GENERATION_ATTRIBUTE);
-      // add rage here if they can generate rage
+      EntityAttributeInstance rageActive = livingAttacker.getAttributeInstance(AttributeLoader.RAGE_ACTIVE_ATTRIBUTE);
+
+      // Only add rage here if they can generate rage and Rage is not currently active
       if (rageGeneration > 0) {
+        double maxRage = livingAttacker.getAttributeValue(AttributeLoader.MAX_RAGE_ATTRIBUTE);
         EntityAttributeInstance rageLevel = livingAttacker.getAttributeInstance(AttributeLoader.RAGE_LEVEL_ATTRIBUTE);
-        double rageLevelValue = rageLevel.getBaseValue() + 0.5 + (rageGeneration / 20);
 
         // Rage Generation is 1/20 of it's value so 20 should add 1 rage generation to the base 0.5
-        rageLevel.setBaseValue(rageLevelValue);
-        if (rageLevelValue >= 20) {
-          // Apply Rage Effect
-          livingAttacker.addStatusEffect(new StatusEffectInstance(EffectLoader.RAGE_EFFECT, 200));
-          // TODO: set nbt to have Rage = active
-          // if we do this in both server and client... does it matter?
-          // Make timer line up with the amount of Rage that will drain
-          // Rage also cannot be generated while draining, unless time is like 3 seconds...
+        double rageLevelValue = rageLevel.getBaseValue() + 0.5 + (rageGeneration / 20);
+
+        // Once we hit max rageValue then give effect and set rage to active
+        if (rageLevelValue >= maxRage) {
+          // Apply Rage Effect for base of 5 seconds
+          livingAttacker.addStatusEffect(new StatusEffectInstance(EffectLoader.RAGE_EFFECT, (int)(maxRage * 5)));
+
+          // Set rage to active (1 == active, 0 == not active, 0.5 recent attack)
+          rageActive.setBaseValue(1);
+        } else if (rageActive.getBaseValue() < 1) {
+          // only reset attack if rage is not active
+          // only increase rageLevel if rage is not active
+
+          // Set fallback to maxRage if rageLevelValue goes too high
+          rageLevel.setBaseValue(rageLevelValue > maxRage ? maxRage : rageLevelValue);
+
+          // set to 0.5 to signal an attack happened, but not rage is not active
+          rageActive.setBaseValue(0.5);
         }
       }
     }
@@ -193,6 +207,32 @@ public abstract class LivingEntityMixin extends Entity {
           blockStrengthAttr.setBaseValue(maxBlockStrengthValue);
         }
       }
+
+      // ****** RAGE LOGIC ******
+      EntityAttributeInstance rageActive = this.getAttributeInstance(AttributeLoader.RAGE_ACTIVE_ATTRIBUTE);
+      if (rageActive.getBaseValue() == 0.5) {
+        this.recentRageAttack = 0;
+
+        // Reset rageActive so we know when the next hit will be
+        // or if rage activates
+        rageActive.setBaseValue(0);
+      } else {
+        this.recentRageAttack++;
+      }
+
+      if (this.getWorld().getTime() % 5 == 0) {
+        EntityAttributeInstance rageLevel = this.getAttributeInstance(AttributeLoader.RAGE_LEVEL_ATTRIBUTE);
+
+        if (rageActive.getBaseValue() > 0 || this.recentRageAttack > 60) {
+          // this is 4 per second from base of 20, so drain in 5 seconds base
+          double levelUpdate = rageLevel.getBaseValue() - 1;
+          levelUpdate = levelUpdate < 0 ? 0 : levelUpdate;
+          rageLevel.setBaseValue(levelUpdate);
+          if (levelUpdate <= 0) {
+            rageActive.setBaseValue(levelUpdate);
+          }
+        }
+      }
     }
   }
 
@@ -205,6 +245,7 @@ public abstract class LivingEntityMixin extends Entity {
     builder.getReturnValue().add(AttributeLoader.BLOCK_RECOVERY_ATTRIBUTE);
     builder.getReturnValue().add(AttributeLoader.BLOCK_STRENGTH_ATTRIBUTE);
     builder.getReturnValue().add(AttributeLoader.MAX_BLOCK_STRENGTH_ATTRIBUTE);
+    builder.getReturnValue().add(AttributeLoader.RAGE_ACTIVE_ATTRIBUTE);
     builder.getReturnValue().add(AttributeLoader.RAGE_GENERATION_ATTRIBUTE);
     builder.getReturnValue().add(AttributeLoader.RAGE_LEVEL_ATTRIBUTE);
     builder.getReturnValue().add(AttributeLoader.MAX_RAGE_ATTRIBUTE);
